@@ -1,0 +1,6 @@
+*~
+.build
+lib/AFMotor
+lib/LEDBlinker
+lib/RobotMotor
+lib/SoftServo
