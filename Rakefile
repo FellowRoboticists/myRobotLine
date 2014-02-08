@@ -2,30 +2,49 @@
 # myRobotLine Arduino sketch
 #
 # Copyright (c) 2012 Michael Margolis
-# Copyright (c) 2013 Dave Sieh
+# Copyright (c) 2013,2014 Dave Sieh
 #
 # See LICENSE.txt for details.
+#
+# Put the parent directory on the Ruby Load path
+$: << File.dirname(File.dirname(__FILE__))
 
-LIB_DIR = 'lib'
+# Bring in the task support
+require 'arduino-tasks/tasks'
+include ArduinoTasks
+
 BASE_DIR = '..'
 
-ADA_LIB = 'Adafruit-Motor-Shield-library'
-AFMOTOR_LIB = File.join(LIB_DIR, "AFMotor")
+env = ArduinoEnvironment.new BASE_DIR
 
-directory AFMOTOR_LIB do
-  cp_r File.join(BASE_DIR, ADA_LIB), LIB_DIR
-  mv File.join(LIB_DIR, ADA_LIB), AFMOTOR_LIB
-end
+LIBS = [
+  library('AFMotor', 'Adafruit-Motor-Shield-library', 'robot_kit'),
+  library('LEDBlinker'),
+  library('RobotMotor'),
+  library('SoftServo')
+]
 
-LIBS = %w{ LEDBlinker RobotMotor SoftServo }
+create_all_library_tasks env, LIBS, :default
+#LIB_DIR = 'lib'
+#BASE_DIR = '..'
 
-LIBS.each do | lib |
-  directory File.join(LIB_DIR, lib) do
-    cp_r File.join(BASE_DIR, lib, LIB_DIR, lib), LIB_DIR
-  end
+#ADA_LIB = 'Adafruit-Motor-Shield-library'
+#AFMOTOR_LIB = File.join(LIB_DIR, "AFMotor")
 
-  task :default => File.join(LIB_DIR, lib)
-end
+#directory AFMOTOR_LIB do
+  #cp_r File.join(BASE_DIR, ADA_LIB), LIB_DIR
+  #mv File.join(LIB_DIR, ADA_LIB), AFMOTOR_LIB
+#end
 
-task :default => AFMOTOR_LIB
+#LIBS = %w{ LEDBlinker RobotMotor SoftServo }
+
+#LIBS.each do | lib |
+  #directory File.join(LIB_DIR, lib) do
+    #cp_r File.join(BASE_DIR, lib, LIB_DIR, lib), LIB_DIR
+  #end
+
+  #task :default => File.join(LIB_DIR, lib)
+#end
+
+#task :default => AFMOTOR_LIB
 
